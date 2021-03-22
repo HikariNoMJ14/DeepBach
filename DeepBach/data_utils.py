@@ -242,7 +242,7 @@ def make_dataset(chorale_list, dataset_name, voice_ids=voice_ids_default,
                         interval_type, interval_nature = interval.convertSemitoneToSpecifierGeneric(
                             semi_tone)
                         transposition_interval = interval.Interval(
-                            str(interval_nature) + interval_type)
+                            str(interval_nature) + str(interval_type))
                         chorale_tranposed = chorale.transpose(
                             transposition_interval)
                         inputs = chorale_to_inputs(chorale_tranposed,
@@ -392,7 +392,7 @@ def generator_from_raw_dataset(batch_size, timesteps, voice_index,
 
     for i, chorale in enumerate(X):
         assert len(
-            chorale.shape) == 2, "Chorale %i should have dimension 2, but has shape: %s"(
+            chorale.shape) == 2, "Chorale %i should have dimension 2, but has shape: %s" % (
             i, chorale.shape)
 
     # Set chorale_indices
@@ -638,7 +638,7 @@ def create_index_dicts(chorale_list, voice_ids=voice_ids_default):
 def pickled_dataset_path(dataset_dir):
     # last non-empty part is the dataset name
     dataset_name = [el for el in dataset_dir.split('/') if el][-1]
-    return os.path.join(package_dir,
+    return os.path.join(PACKAGE_DIR,
                         'datasets/custom_dataset',
                         dataset_name + '.pickle')
 

@@ -758,7 +758,7 @@ def train_models(model_name, steps_per_epoch, num_epochs, validation_steps,
                             },
                       metrics=['accuracy'])
 
-        model.fit_generator(generator_train, samples_per_epoch=steps_per_epoch,
+        model.fit_generator(generator_train, steps_per_epoch=steps_per_epoch,
                             epochs=num_epochs, verbose=1,
                             validation_data=generator_val,
                             validation_steps=validation_steps)

@@ -30,10 +30,16 @@ def deepBach(num_features_lr, num_features_c, num_pitches, num_features_meta,
     central_metas = Input(shape=(num_features_meta,), name='central_metas')
 
     # embedding layer for left and right
-    embedding_left = Dense(input_dim=num_features_lr + num_features_meta,
-                           output_dim=num_dense, name='embedding_left')
-    embedding_right = Dense(input_dim=num_features_lr + num_features_meta,
-                            output_dim=num_dense, name='embedding_right')
+    embedding_left = Dense(
+        # input_dim=num_features_lr + num_features_meta,
+        units=num_dense,
+        name='embedding_left'
+    )
+    embedding_right = Dense(
+        # input_dim=num_features_lr + num_features_meta,
+        units=num_dense,
+        name='embedding_right'
+    )
 
     predictions_left = TimeDistributed(embedding_left)(
         concatenate([left_features, left_metas]))
@@ -66,10 +72,9 @@ def deepBach(num_features_lr, num_features_c, num_pitches, num_features_meta,
     pitch_prediction = Dense(num_pitches, activation='softmax',
                              name='pitch_prediction')(predictions)
 
-    model = Model(input=[left_features, central_features, right_features,
-                         left_metas, central_metas, right_metas
-                         ],
-                  output=pitch_prediction)
+    model = Model(inputs=[left_features, central_features, right_features,
+                         left_metas, central_metas, right_metas],
+                  outputs=pitch_prediction)
 
     model.compile(optimizer='adam',
                   loss={'pitch_prediction': 'categorical_crossentropy'},
@@ -168,11 +173,11 @@ def deepbach_skip_connections(num_features_lr, num_features_c,
     # retain only last input for skip connections
     predictions_left_old = Lambda(lambda t: t[:, -1, :],
                                   output_shape=lambda input_shape: (
-                                  input_shape[0], input_shape[-1])
+                                      input_shape[0], input_shape[-1])
                                   )(predictions_left_old)
     predictions_right_old = Lambda(lambda t: t[:, -1, :],
                                    output_shape=lambda input_shape: (
-                                   input_shape[0], input_shape[-1],)
+                                       input_shape[0], input_shape[-1],)
                                    )(predictions_right_old)
     # concat or sum
     predictions_left = concatenate(
